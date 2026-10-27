@@ -617,6 +617,13 @@
       }
     }
 
+
+    .form-field input[type="range"] { accent-color: var(--crimson); padding: 0; }
+    .radio-group { display: flex; flex-direction: column; gap: 8px; }
+    .radio-group label { display: flex; gap: 10px; align-items: center; font-weight: 400; }
+    .radio-group input { width: auto; accent-color: var(--crimson); }
+    .total-line { grid-column: 1 / -1; font-size: 1.15rem; }
+
     @media (max-width: 700px) {
       body { font-size: 17px; }
       .hero { padding-left: 18px; padding-right: 18px; }
@@ -781,6 +788,35 @@
       </div>
     </section>
 
+
+    <section aria-labelledby="prize-title">
+      <div class="section-heading"><h2 id="prize-title">Give a prize to a performer</h2></div>
+      <div class="ticket-form-wrap">
+        <p>Pay via KBZPay to <span class="pay-number">09457322394 (Thitsar)</span>, then send your payment screenshot to @HENZOFFLIMITS on Telegram below to confirm.</p>
+        <form class="ticket-form" id="performer-form">
+          <div class="form-field">
+            <label for="performer-name">Performer name</label>
+            <input id="performer-name" name="performer-name" type="text" placeholder="Performer name" required>
+          </div>
+          <div class="form-field full">
+            <label for="prize-amount">Prize amount: <span id="prize-amount-value">10,000 MMK</span></label>
+            <input id="prize-amount" name="prize-amount" type="range" min="1000" max="100000" step="1000" value="10000">
+          </div>
+          <div class="form-field full">
+            <span><strong>Give flowers to performer</strong></span>
+            <div class="radio-group">
+              <label><input type="radio" name="flower" value="No flowers" data-price="0" checked> No flowers</label>
+              <label><input type="radio" name="flower" value="1x roses" data-price="1250"> 1x roses: 1,250 MMK</label>
+              <label><input type="radio" name="flower" value="1 bouquet" data-price="25000"> 1 bouquet: 25,000 MMK</label>
+            </div>
+          </div>
+          <p class="total-line">Total: <strong id="performer-total">10,000 MMK</strong></p>
+          <button class="form-submit" type="submit">Submit performer prize</button>
+          <div class="form-confirm" id="performer-confirm" role="status"></div>
+        </form>
+      </div>
+    </section>
+
     <section class="ticket-section" aria-labelledby="ticket-title">
       <div class="ticket-card">
         <p class="ticket-label">One ticket</p>
@@ -844,6 +880,41 @@
       box.classList.add('show');
       box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+  </script>
+
+  <script>
+    (function () {
+      var form = document.getElementById('performer-form');
+      if (!form) return;
+      var slider = document.getElementById('prize-amount');
+      var amountValue = document.getElementById('prize-amount-value');
+      var totalValue = document.getElementById('performer-total');
+      function formatMMK(n) { return n.toLocaleString('en-US') + ' MMK'; }
+      function flowerPrice() {
+        var checked = form.querySelector('input[name="flower"]:checked');
+        return checked ? parseInt(checked.getAttribute('data-price'), 10) : 0;
+      }
+      function updateTotal() {
+        var prize = parseInt(slider.value, 10);
+        amountValue.textContent = formatMMK(prize);
+        totalValue.textContent = formatMMK(prize + flowerPrice());
+      }
+      slider.addEventListener('input', updateTotal);
+      form.querySelectorAll('input[name="flower"]').forEach(function (radio) {
+        radio.addEventListener('change', updateTotal);
+      });
+      updateTotal();
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var name = document.getElementById('performer-name').value.trim();
+        var checked = form.querySelector('input[name="flower"]:checked');
+        var flower = checked ? checked.value : 'No flowers';
+        var box = document.getElementById('performer-confirm');
+        box.innerHTML = '<strong>Performer prize ready for ' + name + '.</strong><br>Prize: ' + amountValue.textContent + ' · Flowers: ' + flower + ' · Total: ' + totalValue.textContent + '<br>Pay to KBZPay 09457322394 (Thitsar), then send your screenshot to @HENZOFFLIMITS on Telegram below to confirm.';
+        box.classList.add('show');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    })();
   </script>
 </body>
 </html>
