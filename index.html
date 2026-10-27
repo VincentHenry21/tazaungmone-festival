@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <link rel="icon" href="data:,">
   <title>NMA College Tazaungmone Festival</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap');
 
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
       --paper: #fffaf2;
       --paper-2: #f5eadb;
       --ink: #241817;
@@ -24,20 +24,7 @@
       --shadow: 0 18px 55px rgba(72, 28, 25, 0.12);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --paper: #171212;
-        --paper-2: #251c1b;
-        --ink: #fff6ea;
-        --muted: #d5c6bb;
-        --crimson: #c53b50;
-        --crimson-deep: #8e1427;
-        --gold: #f0be4d;
-        --gold-soft: #5b4218;
-        --line: #4f3b36;
-        --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
-      }
-    }
+    
 
     * { box-sizing: border-box; }
 
@@ -67,8 +54,10 @@
     .hero {
       position: relative;
       overflow: hidden;
-      color: #fff9ef;
-      background: var(--crimson-deep);
+      color: var(--crimson-deep);
+      background: linear-gradient(120deg, #ffe9c7, #ffd9e2, #fff3c4, #ffe0a8, #ffe9c7);
+      background-size: 300% 300%;
+      animation: gradientShift 18s ease-in-out infinite;
       padding: max(28px, env(safe-area-inset-top)) 22px 74px;
     }
 
@@ -163,7 +152,7 @@
 
     .tagline {
       margin: 0;
-      color: #f6ddb2;
+      color: #7a1f2b;
       font-size: clamp(1.08rem, 2vw, 1.28rem);
       font-weight: 600;
     }
@@ -309,15 +298,17 @@
       flex-direction: column;
       justify-content: center;
       padding: 34px;
-      color: #fff9ef;
+      color: #5b111d;
       border-radius: 5px 24px 5px 24px;
-      background: var(--crimson-deep);
+      background: linear-gradient(135deg, #ffd166, #ff9aa2, #ffe066);
+      background-size: 200% 200%;
+      animation: gradientShift 14s ease-in-out infinite;
       box-shadow: var(--shadow);
     }
 
     .ticket-label {
       margin: 0 0 9px;
-      color: #f4d293;
+      color: #7a1f2b;
       font-size: .85rem;
       font-weight: 700;
       letter-spacing: .11em;
@@ -369,8 +360,10 @@
 
     footer {
       padding: 24px 18px max(24px, env(safe-area-inset-bottom));
-      color: #f6ddb2;
-      background: var(--crimson-deep);
+      color: var(--crimson-deep);
+      background: linear-gradient(120deg, #ffe9c7, #ffd9e2, #fff3c4);
+      background-size: 200% 200%;
+      animation: gradientShift 20s ease-in-out infinite;
       text-align: center;
       font-size: .92rem;
     }
@@ -427,6 +420,34 @@
     .qr-wrap img { display: block; width: 100%; height: auto; }
     .qr-handle { margin: 18px 0 0; font-weight: 700; }
 
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes lanternFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(10px) rotate(2deg); }
+    }
+
+    @keyframes softGlow {
+      0%, 100% { opacity: .7; }
+      50% { opacity: 1; }
+    }
+
+    body::before { animation: softGlow 12s ease-in-out infinite; }
+
+    .lantern.one { animation: lanternFloat 6s ease-in-out infinite; }
+    .lantern.two { animation: lanternFloat 7s ease-in-out infinite reverse; }
+    .lantern.three { animation: lanternFloat 8s ease-in-out infinite; }
+
+    .vendor-card, .info-card, .ticket-card { transition: transform .25s ease, box-shadow .25s ease; }
+    .vendor-card:hover, .info-card:hover { transform: translateY(-5px) rotate(-.5deg); box-shadow: var(--shadow); }
+    .ticket-card:hover { transform: translateY(-3px) rotate(.5deg); }
+    .vendor-card:nth-child(2):hover { transform: translateY(-5px) rotate(.5deg); }
+
     @media (max-width: 700px) {
       body { font-size: 17px; }
       .hero { padding-left: 18px; padding-right: 18px; }
@@ -445,6 +466,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .hero, .ticket-card, footer, body::before, .lantern { animation: none; }
     }
   </style>
 </head>
